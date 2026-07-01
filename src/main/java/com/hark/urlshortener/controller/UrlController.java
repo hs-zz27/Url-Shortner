@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 //import java.net.URI;
 
 @RestController
@@ -25,11 +24,12 @@ public class UrlController {
             return ResponseEntity.badRequest().build();
         }
         ResponsePaste body = urlService.createPaste(req);
-        if(body.isNewlyCreated){
-//            return ResponseEntity.created(URI.create("/api/" + body.getShortCode())).body(body);
+        if (body.isNewlyCreated) {
+            // return ResponseEntity.created(URI.create("/api/" +
+            // body.getShortCode())).body(body);
             return ResponseEntity.status(HttpStatus.CREATED).body(body);
-        }
-        else return ResponseEntity.ok(body);
+        } else
+            return ResponseEntity.ok(body);
     }
 
 }
