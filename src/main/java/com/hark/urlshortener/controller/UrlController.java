@@ -20,11 +20,11 @@ public class UrlController {
 
     @PostMapping("/shorten")
     public ResponseEntity<ResponsePaste> shortenUrl(@RequestBody RequestPaste req) {
-        if (req.getContent() == null || req.getContent().isBlank()) {
+        if (req.getText() == null || req.getText().isBlank()) {
             return ResponseEntity.badRequest().build();
         }
         ResponsePaste body = urlService.createPaste(req);
-        if (body.isNewlyCreated) {
+        if (body.isNewlyCreated()) {
             // return ResponseEntity.created(URI.create("/api/" +
             // body.getShortCode())).body(body);
             return ResponseEntity.status(HttpStatus.CREATED).body(body);
