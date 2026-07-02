@@ -65,4 +65,10 @@ public class UrlService {
         return paste.getText();
     }
 
+    public void deletePaste(String code) {
+        Paste paste = repository.findByShortCode(code)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Paste not found"));
+        repository.delete(paste);
+    }
+
 }

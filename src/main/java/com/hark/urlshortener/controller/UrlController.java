@@ -3,8 +3,12 @@ package com.hark.urlshortener.controller;
 import com.hark.urlshortener.dto.RequestPaste;
 import com.hark.urlshortener.dto.ResponsePaste;
 import com.hark.urlshortener.service.UrlService;
+
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,10 +38,18 @@ public class UrlController {
             return ResponseEntity.ok(body);
     }
 
+    @Cacheable(cacheNames = "pastes", key = "#code")
     @GetMapping("/{code}")
     public ResponseEntity<String> getPaste(@PathVariable String code) {
         String content = urlService.getPasteContent(code);
         return ResponseEntity.ok(content);
+    }
+
+    @DeleteMapping("/{code}")
+    @CacheEvict(cacheNames = "pastes", key = "#code")
+    public ResponseEntity<String> deletePaste(@PathVariable String code) {
+        urlService.deletePaste(code);
+        return ResponseEntity.ok("Paste deleted");
     }
 
 }
