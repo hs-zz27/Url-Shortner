@@ -1,22 +1,25 @@
 package com.hark.urlshortener.mapper;
 
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import com.hark.urlshortener.dto.RequestPaste;
 import com.hark.urlshortener.dto.ResponsePaste;
 import com.hark.urlshortener.model.Paste;
 
-@Component
-public class PasteMapper {
+@Mapper(componentModel = "spring")
+public interface PasteMapper {
 
-    public Paste toEntity(RequestPaste req, String code) {
-        return Paste.builder()
-                .shortCode(code)
-                .text(req.getText())
-                .build();
-    }
+    @Mapping(target = "shortCode", source = "shortCode")
+    @Mapping(target = "text", source = "req.text")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "expiresAt", ignore = true)
+    @Mapping(target = "views", ignore = true)
+    Paste toEntity(RequestPaste req, String shortCode);
 
-    public ResponsePaste toResponse(Paste paste, String url, boolean newlyCreated) {
-        return new ResponsePaste(paste.getShortCode(), url, newlyCreated);
-    }
+    @Mapping(target = "shortCode", source = "paste.shortCode")
+    @Mapping(target = "url", source = "url")
+    @Mapping(target = "newlyCreated", source = "newlyCreated")
+    ResponsePaste toResponse(Paste paste, String url, boolean newlyCreated);
 }
