@@ -2,13 +2,16 @@ package com.hark.urlshortener.service;
 
 import com.hark.urlshortener.dto.RequestPaste;
 import com.hark.urlshortener.dto.ResponsePaste;
+import com.hark.urlshortener.mapper.PasteMapper;
 import com.hark.urlshortener.model.Paste;
 import com.hark.urlshortener.repository.PasteRepository;
 import com.hark.urlshortener.util.Snowflake;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 
 import java.util.Optional;
 
@@ -17,6 +20,7 @@ import java.util.Optional;
 public class UrlService {
     private final PasteRepository repository;
     private final Snowflake snowflake;
+    private final PasteMapper pasteMapper;
 
     private static final String BASE62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -30,12 +34,9 @@ public class UrlService {
             return new ResponsePaste(p.getShortCode(), buildUrl(p.getShortCode()), false);
         }
         String code = generateCode();
-        Paste paste = Paste.builder()
-                .shortCode(code)
-                .text(req.getText())
-                .build();
+        Paste paste = pasteMapper.toEntity(req, code);
         repository.save(paste);
-        return new ResponsePaste(code, buildUrl(code), true);
+        return pasteMapper.toResponse(paste, buildUrl(code), true);
     }
 
     private String generateCode() {
@@ -56,6 +57,12 @@ public class UrlService {
             id /= 62;
         }
         return sb.reverse().toString();
+    }
+
+    public String getPasteContent(String code) {
+        Paste paste = repository.findByShortCode(code)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Paste not found"));
+        return paste.getText();
     }
 
 }
