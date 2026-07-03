@@ -1,7 +1,5 @@
 package com.hark.urlshortener.service;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,7 +12,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 
 import com.hark.urlshortener.dto.PasteStatsResponse;
 import com.hark.urlshortener.mapper.StatsMapper;
-import com.hark.urlshortener.model.Paste;
 import com.hark.urlshortener.model.PasteViewStats;
 import com.hark.urlshortener.repository.PasteRepository;
 import com.hark.urlshortener.repository.PasteViewRepository;
