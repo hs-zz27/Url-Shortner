@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
@@ -36,6 +37,10 @@ public class UrlService {
         }
         String code = generateCode();
         Paste paste = pasteMapper.toEntity(req, code);
+        Long ttl = req.getExpiresInSeconds();
+        if (ttl != null) {
+            paste.setExpiresAt(LocalDateTime.now().plusSeconds(ttl));
+        }
         repository.save(paste);
         return pasteMapper.toResponse(paste, buildUrl(code), true);
     }
@@ -60,6 +65,7 @@ public class UrlService {
         return sb.reverse().toString();
     }
 
+    @Cacheable(cacheNames = "pastes", key = "#code")
     public String getPasteContent(String code) {
         Paste paste = repository.findByShortCode(code)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Paste not found"));

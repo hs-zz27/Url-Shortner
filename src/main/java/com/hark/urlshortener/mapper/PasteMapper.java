@@ -12,7 +12,7 @@ public interface PasteMapper {
 
     @Mapping(target = "shortCode", source = "shortCode")
     @Mapping(target = "text", source = "req.text")
-    @Mapping(target = "expiresAt", source = "req.expiresInSeconds")
+    @Mapping(target = "expiresAt", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "views", ignore = true)
