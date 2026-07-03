@@ -9,4 +9,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RequestPaste {
     private String text;
+    private Long expiresInSeconds;
 }

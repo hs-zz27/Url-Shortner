@@ -33,7 +33,7 @@ public class Paste {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "expires_at")   // nullable by default → null = never expires
+    @Column(name = "expires_at") // nullable by default → null = never expires
     private LocalDateTime expiresAt;
 
     @Column(nullable = false)
@@ -42,6 +42,7 @@ public class Paste {
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
-        if (this.views == null) this.views = 0L;
+        if (this.views == null)
+            this.views = 0L;
     }
 }

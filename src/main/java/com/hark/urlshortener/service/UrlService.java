@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -62,6 +63,9 @@ public class UrlService {
     public String getPasteContent(String code) {
         Paste paste = repository.findByShortCode(code)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Paste not found"));
+        if (paste.getExpiresAt() != null && paste.getExpiresAt().isBefore(LocalDateTime.now())) {
+            throw new ResponseStatusException(HttpStatus.GONE, "Paste has expired"); // 410
+        }
         return paste.getText();
     }
 

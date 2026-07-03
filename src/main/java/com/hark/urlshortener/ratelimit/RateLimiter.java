@@ -28,6 +28,7 @@ public class RateLimiter {
                 String.valueOf(WINDOW_MS),
                 String.valueOf(LIMIT),
                 UUID.randomUUID().toString());
+
         return result != null && result == 1;
     }
 }

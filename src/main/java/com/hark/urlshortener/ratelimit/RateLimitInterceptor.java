@@ -9,7 +9,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
 @RequiredArgsConstructor
-public class RateLimitInterceptor extends HandlerInterceptor {
+public class RateLimitInterceptor implements HandlerInterceptor {
     private final RateLimiter rateLimiter;
 
     @Override
