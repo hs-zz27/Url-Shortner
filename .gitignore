@@ -50,3 +50,5 @@ logs/
 *.tmp
 *.temp
 
+# Env files
+.env

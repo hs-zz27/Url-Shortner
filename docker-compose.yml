@@ -1,0 +1,22 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env                # keep secrets out of the compose file
+    environment:
+      MACHINE_ID: 1
+      APP_BASE_URL: http://localhost:8080
+
+      # --- Neon (Postgres) ---
+      SPRING_DATASOURCE_URL: ${NEON_URL}
+      SPRING_DATASOURCE_USERNAME: ${NEON_USER}
+      SPRING_DATASOURCE_PASSWORD: ${NEON_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+      # --- Upstash (Redis) ---
+      SPRING_DATA_REDIS_HOST: ${UPSTASH_HOST}
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_DATA_REDIS_PASSWORD: ${UPSTASH_PASSWORD}
+      SPRING_DATA_REDIS_SSL_ENABLED: "true"
