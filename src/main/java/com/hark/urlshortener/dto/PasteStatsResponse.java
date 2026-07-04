@@ -3,9 +3,9 @@ package com.hark.urlshortener.dto;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 @AllArgsConstructor
 public class PasteStatsResponse {
     private String shortCode;
