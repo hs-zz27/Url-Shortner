@@ -51,7 +51,7 @@ public class UrlService {
     }
 
     private String buildUrl(String code) {
-        return baseUrl + "/api/" + code;
+        return baseUrl + "/" + code;
     }
 
     private String toBase62(long id) {

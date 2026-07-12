@@ -1,12 +1,11 @@
 package com.hark.urlshortener.job;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.hark.urlshortener.model.Paste;
 import com.hark.urlshortener.repository.PasteRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -19,10 +18,8 @@ public class ExpiredPasteCleanupJob {
 
     @Scheduled(fixedRate = 30_000)
     @SchedulerLock(name = "deleteExpiredPastes", lockAtLeastFor = "1m", lockAtMostFor = "4m")
+    @Transactional
     public void cleanupExpiredPastes() {
-        List<Paste> expired = repository.findByExpiresAtBefore(LocalDateTime.now());
-        if (!expired.isEmpty()) {
-            repository.deleteAll(expired);
-        }
+        repository.deleteExpiredBefore(LocalDateTime.now());
     }
 }
